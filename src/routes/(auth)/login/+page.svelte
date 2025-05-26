@@ -6,12 +6,13 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { loginSchema } from '$lib/Schema/login.schema';
 	import SubmitButton from '$lib/Component/form/SubmitButton.svelte';
+	import toast from 'svelte-french-toast';
 
 	export let data: PageData;
 
 	let formValid = false;
 
-	const { form, errors, validateForm, enhance } = superForm(data.form, {
+	const { form, errors, validateForm, enhance, message } = superForm(data.form, {
 		validators: zodClient(loginSchema),
 		validationMethod: 'oninput',
 
@@ -24,14 +25,20 @@
 			formValid = true;
 		}
 	});
+
+	$: {
+		if ($message && $message.error) {
+			toast.error($message.error);
+		}
+	}
 </script>
 
-<section class="h-full flex flex-col justify-center">
+<section class="h-full flex flex-col justify-center pt-[34px]">
 	<form
-		use:enhance
 		method="POST"
 		action="?/login"
 		class="small-wrap flex flex-col gap-6 justify-center"
+		use:enhance
 	>
 		<h2>Connexion</h2>
 		<Label label="Email" required>
