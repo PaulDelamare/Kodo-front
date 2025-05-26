@@ -44,6 +44,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@floating-ui/dom": "^1.7.0",
     "@fontsource-variable/jura": "^5.2.5",
     "svelte-french-toast": "^1.2.0"
   }
