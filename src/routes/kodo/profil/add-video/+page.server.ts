@@ -18,7 +18,6 @@ export const actions: Actions = {
     addVideo: async ({ request, fetch }) => {
 
         const form = await superValidate(request, zod(videoSchema));
-        console.log('Form data:', form);
 
         if (!form.valid) {
             return { form };
