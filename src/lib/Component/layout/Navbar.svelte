@@ -29,7 +29,7 @@
     </li>
 	<li class="flex-1 flex flex-col items-center h-full relative">
 		<a class="w-full h-full py-2 flex justify-center items-center flex-col" href="/kodo/messages">
-			<MessagePicto classCustom="w-7 fill-tertiary-500 w-full" />
+			<MessagePicto classCustom="!w-7 fill-tertiary-500 w-full" />
 			<span class="text-[12px]">Messages</span>
 
 			{#if $page.url.pathname.startsWith('/kodo/messages')}
@@ -39,7 +39,7 @@
 	</li>
 	<li class="flex-1 flex flex-col items-center h-full relative">
 		<a class="w-full h-full py-2 flex justify-center items-center flex-col" href="/kodo/profil">
-			<ProfilPicto classCustom="w-6 stroke-tertiary-500 w-full" />
+			<ProfilPicto classCustom="!w-6 stroke-tertiary-500 w-full" />
 			<span class="text-[12px]">Profil</span>
 
 			{#if $page.url.pathname.startsWith('/kodo/profil')}
