@@ -23,4 +23,42 @@ export default class VideoApi extends Api {
                throw new Error('Error Get info : ' + error);
           }
      };
+
+     findAllUserVideo = async (): Promise<ApiResponse<Video[]>> => {
+          try {
+               const response = await this.fetch(
+                    `${env.API_URL}video`,
+                    {
+                         method: 'GET',
+                         credentials: 'include'
+                    }
+               );
+
+               const data: ApiResponse<Video[]> = await response.json();
+               return { ...data };
+          } catch (error) {
+
+               console.error('Get info : ' + error);
+               throw new Error('Error Get info : ' + error);
+          }
+     };
+
+     findVideoById = async (id: string): Promise<ApiResponse<Video>> => {
+          try {
+               const response = await this.fetch(
+                    `${env.API_URL}video/${id}`,
+                    {
+                         method: 'GET',
+                         credentials: 'include'
+                    }
+               );
+
+               const data: ApiResponse<Video> = await response.json();
+               return { ...data };
+          } catch (error) {
+
+               console.error('Get info : ' + error);
+               throw new Error('Error Get info : ' + error);
+          }
+     }
 }
