@@ -31,13 +31,10 @@
 	</label>
 
 	{#if videoUrl}
-		<div class="">
-			<div class="aspect-w-16 aspect-h-9 bg-tertiary-500 rounded-lg overflow-hidden shadow-md">
-				<video src={videoUrl} controls preload="metadata" class="w-full h-full object-contain">
-					<track kind="captions" label="French captions" src="" srclang="fr" default />
-					Votre navigateur ne supporte pas la balise vidéo.
-				</video>
-			</div>
+		<div class="w-full max-h-screen bg-tertiary-500 rounded-lg overflow-hidden shadow-md">
+			<video src={videoUrl} controls preload="metadata" class="w-full h-full object-contain">
+				<track kind="captions" label="French captions" src="" srclang="fr" default />
+			</video>
 		</div>
 	{/if}
 </div>
