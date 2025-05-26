@@ -1,4 +1,6 @@
 <script lang="ts">
+	export let name = '';
+
 	let videoUrl: string | null = null;
 
 	function handleFile(event: Event) {
@@ -25,7 +27,7 @@
 		>
 		<span class="text-gray-600">Cliquez pour sélectionner une vidéo</span>
 		<span class="text-sm text-gray-400">(formats mp4, webm…)</span>
-		<input type="file" accept="video/*" on:change={handleFile} class="hidden" />
+		<input {name} type="file" accept="video/*" on:change={handleFile} class="hidden" />
 	</label>
 
 	{#if videoUrl}
