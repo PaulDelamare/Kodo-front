@@ -36,7 +36,7 @@
 			<a class="text-center relative" href="/kodo/profil/add-video">
 				<img src="/images/addvideo.png" alt="Bouton d'ajout de vidéo" />
 				<div
-					class="size-14 bg-surface-500 absolute top-2/4 left-2/4 -translate-x-1/2 -translate-y-1/2 rounded-lg z-50 flex items-center justify-center text-6xl"
+					class="size-14 bg-surface-500 absolute top-2/4 left-2/4 -translate-x-1/2 -translate-y-1/2 rounded-lg z-10 flex items-center justify-center text-6xl"
 				>
 					+
 				</div>
