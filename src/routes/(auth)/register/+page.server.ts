@@ -17,7 +17,6 @@ export const load = (async () => {
 export const actions: Actions = {
     register: async ({ request, fetch }) => {
 
-        console.log('here')
         const form = await superValidate(request, zod(registerSchema));
 
         if (!form.valid) {
@@ -34,7 +33,6 @@ export const actions: Actions = {
             form.data.password,
             form.data.password_confirmation
         )
-        console.log(response)
 
         if ("error" in response) {
             return message(form, {
