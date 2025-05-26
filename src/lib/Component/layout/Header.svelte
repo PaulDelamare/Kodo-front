@@ -1,4 +1,4 @@
-<header class="h-14">
+<header class="">
 	<div class="header-diagonal bg-secondary-500 w-20 h-[90px] p-4">
 		<img class="w-full" src="/logo_base.png" alt="Logo" />
 	</div>
