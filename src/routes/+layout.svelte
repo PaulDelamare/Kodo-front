@@ -36,7 +36,7 @@
 		<div class="w-full fixed top-0 left-0 z-10">
 			<Header />
 		</div>
-		<div class="flex-1 flex flex-col pb-24">
+		<div class="flex-1 flex flex-col {$page.url.pathname.startsWith('/kodo') ? 'pb-24' : ''}">
 			<slot />
 		</div>
 
