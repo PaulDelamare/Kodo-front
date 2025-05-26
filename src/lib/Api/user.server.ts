@@ -1,6 +1,5 @@
 import { env } from '$env/dynamic/private';
 import type { ApiResponse } from '$lib/Models/response.model';
-// import type { SuccessResponse } from '$lib/Models/api.model';
 import type { User } from '$lib/Models/user.model';
 import { Api } from './api.server';
 
