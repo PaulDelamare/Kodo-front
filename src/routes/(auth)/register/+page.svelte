@@ -42,7 +42,7 @@
 	}
 </script>
 
-<section class="h-full flex flex-col justify-center">
+<section class="h-full flex flex-col justify-center pt-[34px]">
 	<form
 		method="POST"
 		action="?/register"
