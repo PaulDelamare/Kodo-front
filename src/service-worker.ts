@@ -3,23 +3,23 @@
 
 declare let self: ServiceWorkerGlobalScope;
 
-import { build, files, version } from '$service-worker';
+import { build, version } from '$service-worker';
 
 const CACHE = `cache-${version}`;
-const ASSETS = [
-    ...build,
-    ...files
-];
 
-// Installation du service worker : pré-cache les assets
+// Installation du service worker : mise en cache minimale
 self.addEventListener('install', event => {
+    // Mise en cache des ressources essentielles uniquement
     event.waitUntil(
         caches.open(CACHE)
-            .then(cache => cache.addAll(ASSETS))
+            .then(cache => cache.addAll([
+                '/', // Page d'accueil
+                ...build.filter(url => url.endsWith('.css') || url.endsWith('.js')) // Assets essentiels
+            ]))
     );
 });
 
-// Activation : supprime les anciens caches et prend le contrôle immédiat des clients
+// Activation : nettoyage des anciens caches
 self.addEventListener('activate', event => {
     event.waitUntil(
         (async () => {
@@ -33,52 +33,25 @@ self.addEventListener('activate', event => {
     );
 });
 
-// Intercepte les requêtes réseau
+// Version super simplifiée de l'intercepteur de requêtes
 self.addEventListener('fetch', event => {
-    if (event.request.method !== 'GET') return;
-
-    const url = new URL(event.request.url);
-    const isAPIRequest = url.pathname.startsWith('/api/');
-
+    // Ignore complètement les requêtes d'API et de médias
+    if (event.request.url.includes('/api/') || 
+        event.request.url.includes('/uploads/')) {
+        return; // Laisse le navigateur gérer normalement
+    }
+    
+    // Pour les autres ressources, essaie le réseau puis le cache
     event.respondWith(
-        (async () => {
-            const cache = await caches.open(CACHE);
-
-            // 1. Sert les fichiers statiques depuis le cache
-            if (ASSETS.includes(url.pathname)) {
-                const cachedResponse = await cache.match(event.request);
-                if (cachedResponse) return cachedResponse;
-            }
-
-            // 2. Gestion des API (cache-first, update background)
-            if (isAPIRequest) {
-                const cachedResponse = await cache.match(event.request);
-                if (cachedResponse) {
-                    // Met à jour le cache en arrière-plan si possible
-                    fetch(event.request).then(response => {
-                        if (response.ok) cache.put(event.request, response.clone());
-                    }).catch(() => { });
-                    return cachedResponse;
-                }
-                try {
-                    const response = await fetch(event.request);
-                    if (response.ok) cache.put(event.request, response.clone());
-                    return response;
-                } catch {
-                    return new Response('Données non disponibles hors ligne', { status: 504 });
-                }
-            }
-
-            // 3. Pour le reste : stratégie réseau puis cache
-            try {
-                const response = await fetch(event.request);
-                if (response.ok) cache.put(event.request, response.clone());
-                return response;
-            } catch {
-                const cachedResponse = await cache.match(event.request);
-                return cachedResponse || new Response('Not found', { status: 404 });
-            }
-        })()
+        fetch(event.request)
+            .catch(() => {
+                // En cas d'échec réseau, on tente le cache
+                return caches.match(event.request)
+                    .then(cachedResponse => {
+                        // Retourne la réponse du cache ou une réponse 404 standard
+                        return cachedResponse || new Response('Not found', { status: 404 });
+                    });
+            })
     );
 });
 
@@ -88,6 +61,3 @@ self.addEventListener('message', event => {
         self.skipWaiting();
     }
 });
-
-// Commande VitePWA pour générer une image :
-// npx @vite-pwa/assets-generator --preset minimal static/logo.svg (adapter avec ton logo)
