@@ -3,7 +3,7 @@
     export let padding = 'p-4';
 </script>
 
-<section class="">
+<section>
 	<div
 		class="fixed left-0 top-10 w-full z-10 bg-surface-500 h-[50px] border-y-2 flex items-center justify-center"
 	>
