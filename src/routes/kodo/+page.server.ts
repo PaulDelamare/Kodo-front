@@ -24,8 +24,6 @@ export const actions: Actions = {
         const page = Number(formData.get('page') || '1');
         const filter = formData.get('filter') as 'graphisme' | '3d-art' | 'ui-ux' || undefined;
 
-        console.log('loadMore', page, filter);
-
         const apiComment = new VideoApi(fetch);
         const res = await apiComment.findAllVideoInfinite(page, 5, filter);
 
@@ -35,5 +33,23 @@ export const actions: Actions = {
         }
 
         return JSON.stringify(res);
+    },
+    search: async ({ request, fetch }) => {
+        const formData = await request.formData();
+        const query = formData.get('query') as string;
+
+        if (!query) {
+            throw error(400, 'Search term is required');
+        }
+
+
+        const apiVideo = new VideoApi(fetch);
+        const response = await apiVideo.findVideoByName(query);
+
+        if ("error" in response) {
+            throw error(500, "Erreur lors de la recherche des vidéos");
+        }
+
+        return JSON.stringify({ results: response });
     }
 }
