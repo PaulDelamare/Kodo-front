@@ -62,7 +62,7 @@ export default class VideoApi extends Api {
           }
      };
 
-     findAllVideoInfinite = async (page: number, pageSize: number = 20, category?: 'graphisme' | '3d-art' | 'ui-ux'): Promise<ApiResponse<Video[]>> => {
+     findAllVideoInfinite = async (page: number, pageSize: number = 20, category?: 'graphisme' | '3d-art' | 'ui-ux' | 'follow'): Promise<ApiResponse<Video[]>> => {
           try {
 
                let url = `${env.API_URL}video-all?page=${page}&pageSize=${pageSize}`;
@@ -91,10 +91,10 @@ export default class VideoApi extends Api {
           }
      };
 
-     findVideoByName = async (name: string): Promise<ApiResponse<Video[]>> => {
+     findVideoByName = async (name: string, categorie?: string): Promise<ApiResponse<Video[]>> => {
           try {
                const response = await this.fetch(
-                    `${env.API_URL}video-name?name=${encodeURIComponent(name)}`,
+                    `${env.API_URL}video-name?name=${encodeURIComponent(name)}${categorie ? `&categorie=${encodeURIComponent(categorie)}` : ''}`,
                     {
                          method: 'GET',
                          credentials: 'include',
