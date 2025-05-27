@@ -134,8 +134,8 @@
 								<h2 class="text-base">{conversation.user.firstname}</h2>
 								{#if conversation.lastMessage}
 									<p>
-										{conversation.lastMessage.content.slice(0, 50)}{conversation.lastMessage.content
-											.length > 50
+										{conversation.lastMessage.content.slice(0, 20)}{conversation.lastMessage.content
+											.length > 20
 											? '…'
 											: ''}
 									</p>
