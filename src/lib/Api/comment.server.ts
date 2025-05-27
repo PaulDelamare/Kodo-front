@@ -31,7 +31,7 @@ export default class CommentApi extends Api {
         }
     };
 
-    findAllCommentsByVideoId = async (video_id: Video['id']): Promise<ApiResponse> => {
+    findAllCommentsByVideoId = async (video_id: Video['id']): Promise<ApiResponse<Comment[]>> => {
         try {
             const response = await this.fetch(
                 `${env.API_URL}comment/${video_id}`,
