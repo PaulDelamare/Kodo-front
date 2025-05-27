@@ -1,4 +1,4 @@
-import { redirect } from '@sveltejs/kit';
+import { redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ locals }) => {
@@ -9,3 +9,11 @@ export const load = (async ({ locals }) => {
         throw redirect(303, '/kodo');
     }
 }) satisfies PageServerLoad;
+
+export const actions: Actions = {
+    logout: async ({ locals, cookies }) => {
+        locals.user = null;
+        cookies.delete('access_token', { path: '/' });
+        throw redirect(303, '/login');
+    }
+}

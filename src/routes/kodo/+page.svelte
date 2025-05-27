@@ -40,7 +40,6 @@
 		loadMoreInUse = true;
 		const formData = new FormData();
 		formData.append('page', pageData.toString());
-		console.log(pageData);
 		if (activeFilter) {
 			formData.append('filter', activeFilter);
 		}

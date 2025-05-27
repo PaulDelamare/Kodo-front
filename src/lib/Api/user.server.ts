@@ -25,4 +25,26 @@ export default class UserApi extends Api {
             throw new Error('Error Get info : ' + error);
         }
     };
+
+    findUsersByText = async (text: string): Promise<ApiResponse<User[]>> => {
+        try {
+            const response = await this.fetch(
+                `${env.API_URL}user?text=${text}`,
+                {
+                    method: 'get',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include'
+                }
+            );
+
+            const data: ApiResponse<User[]> = await response.json();
+            return { ...data };
+        } catch (error) {
+
+            console.error('Find users by text : ' + error);
+            throw new Error('Error Find users by text : ' + error);
+        }
+    }
 }
