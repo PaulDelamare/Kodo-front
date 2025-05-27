@@ -10,5 +10,8 @@ export interface Video {
      user_id: string;
      createdAt: Date;
      updatedAt: Date;
-     user: Omit<User, 'createdAt' | 'updatedAt'>; // Exclude createdAt and updatedAt from User
+     user: Omit<User, 'createdAt' | 'updatedAt'>;
+     _count: {
+          views: number;
+     }
 }
