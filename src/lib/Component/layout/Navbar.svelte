@@ -17,7 +17,7 @@
 			{/if}
 		</a>
 	</li>
-    <li class="flex-1 flex flex-col items-center h-full relative">
+	<!-- <li class="flex-1 flex flex-col items-center h-full relative">
         <a class="w-full h-full py-2 flex justify-center items-center flex-col" href="/kodo/cours">
             <CoursPicto classCustom="w-8 stroke-tertiary-500 w-full" />
             <span class="text-[12px]">Cours</span>
@@ -26,7 +26,7 @@
                 <div class=" absolute -bottom-3 w-full h-5 bg-primary-500 rounded-[100%]"></div>
             {/if}
         </a>
-    </li>
+    </li> -->
 	<li class="flex-1 flex flex-col items-center h-full relative">
 		<a class="w-full h-full py-2 flex justify-center items-center flex-col" href="/kodo/messages">
 			<MessagePicto classCustom="!w-7 fill-tertiary-500 w-full" />
