@@ -1,3 +1,5 @@
+import type { Video } from "./video.model";
+
 export interface User {
     id: string;
     firstname: string;
@@ -5,4 +7,5 @@ export interface User {
     email: string;
     createdAt: Date;
     updatedAt: Date;
+    videos?: Video[];
 }
