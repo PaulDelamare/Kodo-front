@@ -50,6 +50,8 @@
 						</a>
 					</div>
 				</div>
+			{:else}
+				<p class="text-center mt-8">Aucune vidéo trouvée.</p>
 			{/each}
 		</div>
 	{:else}
