@@ -109,7 +109,7 @@
 		{/if}
 	</div>
 
-	<ul class="divide-y-2">
+	<ul class="divide-y-2 divide-secondary-200">
 		{#if conversations.length === 0}
 			<li class="p-4 text-center">Aucune conversation trouvée.</li>
 		{/if}
@@ -145,7 +145,11 @@
 						<div>
 							{#if conversation.lastMessage}
 								<span class="text-[11px] font-normal">
-									{timeSince(conversation.lastMessage.createdAt)}
+									{#if conversation.lastMessage && conversation.lastMessage.isView && conversation.lastMessage.viewDate}
+										Vu il y a {timeSince(conversation.lastMessage.viewDate)}
+									{:else}
+										{timeSince(conversation.lastMessage.createdAt)}
+									{/if}
 								</span>
 							{/if}
 						</div>
