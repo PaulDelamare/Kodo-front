@@ -33,8 +33,13 @@ export const load = (async ({ cookies, params, fetch }) => {
         throw error(404, response.error.message);
     }
 
-    const form = await superValidate(zod(messageSchema));
+    const messageView = await apiConversation.defineAllMessageView(id);
 
+    if ("error" in messageView) {
+        throw error(500, messageView.error.message);
+    }
+
+    const form = await superValidate(zod(messageSchema));
 
 
     return {

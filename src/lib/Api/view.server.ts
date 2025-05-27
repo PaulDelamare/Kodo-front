@@ -2,11 +2,11 @@ import { env } from '$env/dynamic/private';
 import type { ApiResponse } from '$lib/Models/response.model';
 import { Api } from './api.server';
 
-export default class FollowerApi extends Api {
-     followUser = async (userId: string): Promise<ApiResponse> => {
+export default class ViewApi extends Api {
+     viewVideo = async (videoId: string): Promise<ApiResponse> => {
           try {
                const response = await this.fetch(
-                    `${env.API_URL}follow/${userId}`,
+                    `${env.API_URL}view/${videoId}`,
                     {
                          method: 'POST',
                          headers: {
@@ -19,31 +19,27 @@ export default class FollowerApi extends Api {
                const data: ApiResponse = await response.json();
                return { ...data };
           } catch (error) {
-
-               console.error('Error following user: ' + error);
-               throw new Error('Error following user: ' + error);
+               console.error('Error saving video view: ' + error);
+               throw new Error('Error saving video view: ' + error);
           }
      };
 
-     checkFollow = async (userId: string): Promise<ApiResponse<{ isFollowing: boolean }>> => {
+     findCountViewVideo = async (): Promise<ApiResponse<{ views: number }>> => {
           try {
                const response = await this.fetch(
-                    `${env.API_URL}follow/${userId}`,
+                    `${env.API_URL}view`,
                     {
                          method: 'GET',
-                         headers: {
-                              'Content-Type': 'application/json'
-                         },
-                         credentials: 'include',
+                         credentials: 'include'
                     }
                );
 
-               const data: ApiResponse<{ isFollowing: boolean }> = await response.json();
+               const data: ApiResponse<{ views: number }> = await response.json();
                return { ...data };
           } catch (error) {
 
-               console.error('Error checking follow status: ' + error);
-               throw new Error('Error checking follow status: ' + error);
+               console.error('Error fetching view count: ' + error);
+               throw new Error('Error fetching view count: ' + error);
           }
-     }
+     };
 }

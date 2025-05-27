@@ -1,12 +1,23 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import type { User } from '$lib/Models/user.model';
+	import { goBack } from '$lib/Utils/goBack';
+	import ArrowLeftPicto from '../Picto/ArrowLeftPicto.svelte';
 
 	export let user: User;
 	export let link = true;
+	export let goBackButton = true
 </script>
 
 <div class="flex flex-col gap-3">
+	{#if goBackButton}
+		<div class="p-4">
+			<button on:click={goBack}>
+				<ArrowLeftPicto classCustom="w-6" />
+			</button>
+		</div>
+		
+	{/if}
 	<div
 		class="w-full max-w-[500px] mx-auto relative h-40 rounded-3xl"
 		style="background-image: url('/images/fond.jpg'); background-size: cover; background-position: center;"
@@ -33,7 +44,9 @@
 			>
 				Mes vidéos
 			</a>
-			<a class="note cursor-pointer" on:click|preventDefault={() => alert('Coming soon')} href="/">
+			<a class="note {$page.url.pathname === '/kodo/profil/save'
+					? '!bg-secondary-500 text-surface-500'
+					: ''}"  href="/kodo/profil/save">
 				Mes enregistrements
 			</a>
 		</div>

@@ -9,6 +9,7 @@ export interface Conversation {
         createdAt: Date;
         senderId: string;
         isView: boolean;
+        viewDate: Date | null;
 
     } | null;
 }

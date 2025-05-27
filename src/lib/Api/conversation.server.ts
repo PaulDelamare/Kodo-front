@@ -130,6 +130,27 @@ export default class ConversationApi extends Api {
             console.error('Error checking conversation existence: ' + error);
             throw new Error('Error checking conversation existence: ' + error);
         }
+    };
 
+    defineAllMessageView = async (conversationId: string): Promise<ApiResponse<{ success: boolean }>> => {
+        try {
+            const response = await this.fetch(
+                `${env.API_URL}conversation/${conversationId}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include'
+                }
+            );
+
+            const data: ApiResponse<{ success: boolean }> = await response.json();
+            return { ...data };
+        } catch (error) {
+
+            console.error('Error defining all message view: ' + error);
+            throw new Error('Error defining all message view: ' + error);
+        }
     }
 }
