@@ -5,7 +5,7 @@
 	import TextPicto from '$lib/Component/Picto/TextPicto.svelte';
 	import { goBack } from '$lib/Utils/goBack';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import type { PageData } from './$types';
+	import type { ActionData, PageData } from './$types';
 	import { superForm } from 'sveltekit-superforms';
 	import { commentSchema } from '$lib/Schema/comment.schema';
 	import toast from 'svelte-french-toast';
@@ -13,16 +13,20 @@
 	import type { Comment } from '$lib/Models/comment.model';
 	import { onMount } from 'svelte';
 	import UsersPicto from '$lib/Component/Picto/UsersPicto.svelte';
+	import BookMarkEmpty from '$lib/Component/Picto/BookMarkEmpty.svelte';
+	import BookMark from '$lib/Component/Picto/BookMark.svelte';
+	import { invalidateAll } from '$app/navigation';
 
 	export let data: PageData;
 
 	const video = data.video;
 	const imgUrl = data.imgUrl;
 	let comments = data.comments;
+	let isSave = data.isSaved;
 
 	let formValid = false;
 
-	const { form, errors, validateForm, message } = superForm(data.form, {
+	const { errors, validateForm, message } = superForm(data.form, {
 		validators: zodClient(commentSchema),
 		validationMethod: 'oninput',
 
@@ -97,6 +101,17 @@
 			if (sentinel) observer.unobserve(sentinel);
 		};
 	});
+
+	export let form: ActionData;
+	$: if (form && form.success) {
+		form.success = false;
+		invalidateAll().then(() => {
+			isSave = data.isSaved;
+		});
+		toast.success(
+			!isSave ? 'Vidéo enregistrée avec succès !' : 'Vidéo retirée de vos enregistrements !'
+		);
+	}
 </script>
 
 <Layout padding="pb-20" title="Video">
@@ -106,13 +121,23 @@
 		</button>
 	</div>
 	<div class="mx-auto relative flex flex-col gap-2 p-4">
-		<div
-			class="header-diagonal bg-primary-500 size-14 flex justify-end items-center pr-1 pt-2 absolute top-4 left-4"
+		<a
+			href={`/kodo/profil/${video.user.id}`}
+			class="header-diagonal bg-primary-500 size-14 flex justify-end items-center pr-1 pt-2 absolute top-4 left-4 z-10"
 		>
 			<div class="size-10 rounded-full p-1">
 				<img src="/images/embleme.png" alt="Logo de l'utilisateur" />
 			</div>
-		</div>
+		</a>
+		<form method="POST" action="?/saveVideo" class=" absolute top-6 right-6 z-10" use:enhance>
+			<input type="hidden" name="videoId" value={video.id} />
+			<button class="size-8 bg-surface-500/70 rounded-full flex justify-center items-center">
+				{#if isSave}<BookMark classCustom="w-4 fill-primary-800" />{:else}<BookMarkEmpty
+						classCustom="w-4 fill-primary-800"
+					/>
+				{/if}</button
+			>
+		</form>
 		<video
 			crossorigin="anonymous"
 			src={`${imgUrl}${video.videoUrl}`}
@@ -125,7 +150,7 @@
 		<div class="flex justify-between px-4">
 			<h3 class="text-lg font-semibold text-center">{video.title}</h3>
 			<p class="text-sm text-gray-600 text-center flex items-center gap-2">
-				<UsersPicto classCustom="w-4" />{video.viewCount}
+				<UsersPicto classCustom="w-4" />{video._count.views}
 			</p>
 		</div>
 	</div>
