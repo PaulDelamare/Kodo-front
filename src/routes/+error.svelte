@@ -7,7 +7,9 @@
 	<span class="text-xl">{$page.error?.message}</span>
 	<img src="/images/error.png" alt="Error" />
 
-	<a class="bg-secondary-500 text-primary-500 px-4 py-2 rounded-full" href="/kodo">Retourner à la page d'accueil</a>
+	<a class="bg-secondary-500 text-primary-500 px-4 py-2 rounded-full" href="/kodo"
+		>Retourner à la page d'accueil</a
+	>
 </div>
 
 <style>
