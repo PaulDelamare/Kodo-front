@@ -8,6 +8,7 @@
 	import { timeSince } from '$lib/Utils/formatDate';
 	import { superForm } from 'sveltekit-superforms';
 	import toast from 'svelte-french-toast';
+	import SearchPicto from '$lib/Component/Picto/SearchPicto.svelte';
 
 	export let data: PageData;
 
@@ -79,14 +80,17 @@
 </script>
 
 <Layout padding="" title="Mes messages">
-	<div class="flex flex-col items-center gap-6 p-4">
-		<input
-			type="text"
-			bind:value={query}
-			on:input={onInput}
-			placeholder="Rechercher..."
-			class="input-container rounded-full w-full max-w-md"
-		/>
+	<div class="flex flex-col items-center gap-6 p-4 px-8">
+		<label class="flex items-center border border-tertiary-200 rounded-full w-full px-2">
+			<SearchPicto classCustom="w-6 h-6 fill-tertiary-300" />
+			<input
+				type="text"
+				bind:value={query}
+				on:input={onInput}
+				placeholder="Rechercher..."
+				class="border-none w-full rounded-full"
+			/>
+		</label>
 
 		{#if loading}
 			<p>Recherche en cours…</p>
