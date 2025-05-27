@@ -97,9 +97,11 @@
 			if (sentinel) observer.unobserve(sentinel);
 		};
 	});
+
+
 </script>
 
-<Layout padding="pb-20" title="">
+<Layout padding="pb-20" title="Video">
 	<div class="p-4">
 		<button on:click={goBack}>
 			<ArrowLeftPicto classCustom="w-6" />
