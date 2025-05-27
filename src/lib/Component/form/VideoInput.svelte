@@ -1,17 +1,29 @@
 <script lang="ts">
 	export let name = '';
 
+	import { onDestroy } from 'svelte';
+
 	let videoUrl: string | null = null;
 
 	function handleFile(event: Event) {
 		const input = event.target as HTMLInputElement;
 		if (input.files && input.files[0]) {
 			const file = input.files[0];
+			// Revoke the previous object URL if it exists
+			if (videoUrl) {
+				URL.revokeObjectURL(videoUrl);
+			}
 			videoUrl = URL.createObjectURL(file);
 		} else {
 			videoUrl = null;
 		}
 	}
+	// Revoke the object URL when the component is destroyed
+	onDestroy(() => {
+		if (videoUrl) {
+			URL.revokeObjectURL(videoUrl);
+		}
+	});
 </script>
 
 <div class="max-w-xl mx-auto px-4 flex flex-col gap-4 bg-surface-500 rounded-2xl">
