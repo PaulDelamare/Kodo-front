@@ -60,5 +60,34 @@ export default class VideoApi extends Api {
                console.error('Get info : ' + error);
                throw new Error('Error Get info : ' + error);
           }
-     }
+     };
+
+     findAllVideoInfinite = async (page: number, pageSize: number = 20, category?: 'graphisme' | '3d-art' | 'ui-ux'): Promise<ApiResponse<Video[]>> => {
+          try {
+
+               let url = `${env.API_URL}video-all?page=${page}&pageSize=${pageSize}`;
+               if (category) {
+                    url += `&categorie=${category}`;
+               }
+
+               const response = await this.fetch(
+                    url,
+                    {
+                         method: 'GET',
+                         headers: {
+                              'Content-Type': 'application/json'
+                         },
+                         credentials: 'include',
+                    }
+               );
+
+               const data: ApiResponse<Video[]> = await response.json();
+
+               return { ...data };
+
+          } catch (error) {
+               console.error(`findAllVideoInfinite : ${error}`);
+               throw new Error(`Error findAllVideoInfinite : ${error}`);
+          }
+     };
 }
