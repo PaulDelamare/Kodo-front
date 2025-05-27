@@ -46,8 +46,6 @@
 		$message.success = false;
 
 		comments = [$message.response, ...comments];
-
-		console.log($message);
 	}
 
 	let page = 2;
