@@ -52,7 +52,7 @@ export default class CommentApi extends Api {
         }
     };
 
-    getAllProductByMerchantId = async (video_id: Video['id'], page: number, pageSize = 20): Promise<ApiResponse<Comment[]>> => {
+    findAllCommentsInfinite = async (video_id: Video['id'], page: number, pageSize = 20): Promise<ApiResponse<Comment[]>> => {
         try {
             const response = await this.fetch(
                 `${env.API_URL}comment/${video_id}?page=${page}&pageSize=${pageSize}`,
@@ -69,8 +69,8 @@ export default class CommentApi extends Api {
             return { ...data };
         } catch (error) {
 
-            console.error('GetAllProductByMerchantId : ' + error);
-            throw new Error('Error GetAllProductByMerchantId : ' + error);
+            console.error('findAllCommentsByVideoId : ' + error);
+            throw new Error('Error findAllCommentsByVideoId : ' + error);
         }
     };
 }
