@@ -148,7 +148,7 @@
 									crossorigin="anonymous"
 									src={`${imgUrl}${video.thumbnailUrl || video.videoUrl.replace('.mp4', '_thumb.jpg')}`}
 									alt={video.title}
-									class="w-full max-h-[320pxpx] object-contain rounded-lg shadow-md"
+									class="w-full max-h-[320px] object-contain rounded-lg shadow-md"
 								/>
 							</div>
 
