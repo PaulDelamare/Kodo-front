@@ -90,4 +90,25 @@ export default class VideoApi extends Api {
                throw new Error(`Error findAllVideoInfinite : ${error}`);
           }
      };
+
+     findVideoByName = async (name: string): Promise<ApiResponse<Video[]>> => {
+          try {
+               const response = await this.fetch(
+                    `${env.API_URL}video-name?name=${encodeURIComponent(name)}`,
+                    {
+                         method: 'GET',
+                         credentials: 'include',
+                         headers: {
+                              'Content-Type': 'application/json'
+                         }
+                    }
+               );
+
+               const data: ApiResponse<Video[]> = await response.json();
+               return { ...data };
+          } catch (error) {
+               console.error('Error searching video by name: ' + error);
+               throw new Error('Error searching video by name: ' + error);
+          }
+     }
 }
