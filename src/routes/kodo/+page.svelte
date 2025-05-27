@@ -52,7 +52,7 @@
 
 		if (res.ok) {
 			const newCommentsStringify = await res.json();
-			const newComments: Video[] = JSON.parse(JSON.parse(newCommentsStringify.data)).data;
+			const newComments: Video[] = newCommentsStringify.data;
 
 			if (newComments.length === 0) {
 				hasMore = false;
