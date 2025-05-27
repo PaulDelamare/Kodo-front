@@ -1,3 +1,5 @@
+import type { User } from "./user.model";
+
 export interface Video {
      id: string;
      title: string;
@@ -8,4 +10,5 @@ export interface Video {
      user_id: string;
      createdAt: Date;
      updatedAt: Date;
+     user: Omit<User, 'createdAt' | 'updatedAt'>; // Exclude createdAt and updatedAt from User
 }
