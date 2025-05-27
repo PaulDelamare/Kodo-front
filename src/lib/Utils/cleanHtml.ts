@@ -16,7 +16,7 @@ function cleanHtml(html: string) {
     html = html.replace(/<style[^>]*>?[\s\S]*?<\/style>/gi, '');
 
     // Supprimer les attributs dangereux
-    html = html.replace(/on\w+="[^"]*"/gi, '');
+    html = html.replace(/on\w+=["'][^"']*["']/gi, '');
 
     // Échapper les caractères spéciaux
     html = escapeHtml(html);
