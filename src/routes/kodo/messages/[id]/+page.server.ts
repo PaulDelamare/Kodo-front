@@ -60,7 +60,6 @@ export const actions: Actions = {
         const apiConversation = new ConversationApi(fetch);
         const response = await apiConversation.sendMessage(params.id!, form.data.content);
 
-        console.log('response', response);
         if ("error" in response) {
             return message(form, {
                 error: response.error.message

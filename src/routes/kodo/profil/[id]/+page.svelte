@@ -1,35 +1,51 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
 	import Layout from '$lib/Component/layout/Layout.svelte';
+	import HeartEmptyPicot from '$lib/Component/Picto/HeartEmptyPicot.svelte';
+	import HeartPicto from '$lib/Component/Picto/HeartPicto.svelte';
 	import UsersPicto from '$lib/Component/Picto/UsersPicto.svelte';
 	import Baniere from '$lib/Component/utils/Baniere.svelte';
-	import DeleteButton from '$lib/Component/utils/DeleteButton.svelte';
-	import MultiButton from '$lib/Component/utils/MultiButton.svelte';
-	import type { PageData } from './$types';
+	import type { ActionData, PageData } from './$types';
 
 	export let data: PageData;
-
-	const videos = data.videos;
 	const user = data.user;
+	const userProfile = data.userProfile;
 	const imgUrl = data.imgUrl;
+
+	let isFollowing = data.isFollowing;
+	export let form: ActionData;
+
+	$: if (form && form.success) {
+		form.success = false;
+
+		invalidateAll().then(() => {
+			isFollowing = data.isFollowing;
+		});
+	}
 </script>
 
 <Layout title="Mon profil">
-	{#if user && videos && imgUrl}
-		<Baniere {user} />
+	{#if user && userProfile.videos && imgUrl}
+		<Baniere link={false} user={userProfile} />
+		<form use:enhance method="POST" action="?/follow" class="ml-auto">
+			<button
+				class=" {isFollowing
+					? 'bg-secondary-500 text-surface-500'
+					: 'bg-surface-600 text-tertiary-500'} ml-auto py-2 px-4 rounded flex items-center gap-2"
+				>{#if isFollowing}
+					<HeartPicto classCustom="w-5 fill-surface-500" /> Suivi
+				{:else}
+					<HeartEmptyPicot classCustom="w-5" />Suivre
+				{/if}
+			</button>
+		</form>
+
 		<div class="space-y-6 mt-6">
-			{#each videos as video, index}
+			{#each userProfile.videos as video}
 				<div class="flex flex-col items-center gap-2">
 					<!-- Lien vers la page de détail de la vidéo -->
 					<div class="w-full max-w-xs flex flex-col gap-2 relative">
-						<div class="absolute top-2 right-2 z-10">
-							<MultiButton {index} identification="video">
-								<form on:submit={() => alert('Bientôt disponible')} class="p-2">
-									<input name="id" type="hidden" value={video.id} />
-									<DeleteButton />
-								</form>
-							</MultiButton>
-						</div>
-
 						<a href={`/kodo/cours/${video.id}`} class="block">
 							<div class="relative">
 								<!-- Image miniature -->
@@ -37,7 +53,7 @@
 									crossorigin="anonymous"
 									src={`${imgUrl}${video.thumbnailUrl || video.videoUrl.replace('.mp4', '_thumb.jpg')}`}
 									alt={video.title}
-									class="w-full max-w-xs max-h-[320pxpx] object-contain rounded-lg shadow-md"
+									class="w-full max-w-xs max-h-[320px] object-contain rounded-lg shadow-md"
 								/>
 							</div>
 
@@ -50,8 +66,6 @@
 						</a>
 					</div>
 				</div>
-			{:else}
-				<p class="text-center mt-8">Aucune vidéo trouvée.</p>
 			{/each}
 		</div>
 	{:else}
