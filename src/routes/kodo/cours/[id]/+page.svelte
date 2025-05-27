@@ -97,8 +97,6 @@
 			if (sentinel) observer.unobserve(sentinel);
 		};
 	});
-
-
 </script>
 
 <Layout padding="pb-20" title="Video">
@@ -154,6 +152,7 @@
 	</div>
 
 	<div class="rounded-t-2xl comments w-full p-4">
+		<h2>Commentaires</h2>
 		{#each comments as comment}
 			<div class="flex items-end gap-2">
 				<div class="size-10 rounded-full p-1">
