@@ -19,6 +19,13 @@
 
 	let activeFilter: '' | 'graphisme' | '3d-art' | 'ui-ux' = '';
 
+	const filterData: Record<'' | 'graphisme' | '3d-art' | 'ui-ux', any> = {
+		'': { label: 'Toutes', description: 'Tous les cours disponibles' },
+		graphisme: { label: 'Graphisme', description: 'Cours de graphisme' },
+		'3d-art': { label: '3D Art', description: 'Cours de 3D Art' },
+		'ui-ux': { label: 'UI / UX', description: 'Cours de UI / UX' }
+	};
+
 	let loadMoreInUse = false;
 
 	const filters = [
@@ -29,7 +36,6 @@
 	];
 
 	const changeActiveFilter = (filter: string) => {
-		console.log('here');
 		activeFilter = filter as '' | 'graphisme' | '3d-art' | 'ui-ux';
 		pageData = 1;
 		videos = [];
@@ -90,7 +96,6 @@
 		const observer = new IntersectionObserver(
 			([entry]) => {
 				showScrollTop = !entry.isIntersecting;
-				console.log('herehuieifhuir', !entry.isIntersecting);
 			},
 			{ threshold: 0 }
 		);
@@ -107,13 +112,98 @@
 		// Remonter l’élément bindé en haut du viewport, puis ajuster de 90px vers le haut
 		toggleContainer?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 	}
+
+	let query = '';
+	let debounceTimeout: ReturnType<typeof setTimeout>;
+	let loading = false;
+
+	let results: Video[] = [];
+
+	async function doSearch(q: string) {
+		if (!q) {
+			results = [];
+			return;
+		}
+
+		const formData = new FormData();
+		formData.append('query', q);
+
+		loading = true;
+		try {
+			const res = await fetch(`${window.location.pathname}?/search`, {
+				method: 'POST',
+				body: formData
+			});
+
+			if (res.ok) {
+				const newCommentsStringify = await res.json();
+				const newComments = newCommentsStringify.data;
+
+				const data = JSON.parse(JSON.parse(newComments)).results.data as Video[];
+
+				results = data;
+			} else {
+				console.error('Erreur lors du chargement des produits');
+			}
+		} catch (e) {
+			console.error('Recherche échouée', e);
+		} finally {
+			loading = false;
+		}
+	}
+
+	function onInput() {
+		clearTimeout(debounceTimeout);
+		debounceTimeout = setTimeout(() => {
+			doSearch(query);
+		}, 500);
+	}
 </script>
 
-<Layout title="Accueil">
+<Layout padding="" title="Accueil">
 	{#if videos && imgUrl}
 		<div bind:this={toggleContainer}></div>
-		<div class="space-y-6 mt-2">
-			<div class="overflow-x-auto py-2">
+		<div class="px-8 relative w-full">
+			<input
+				bind:value={query}
+				on:input={onInput}
+				type="search"
+				placeholder="Rechercher..."
+				class="input-container rounded-full w-full"
+			/>
+			{#if query && results.length > 0}
+				<div
+					class="absolute top-11 left-0 w-full bg-surface-200 border shadow-xl rounded-lg p-4 z-50"
+				>
+					<h3 class="text-lg font-semibold mb-2">Résultats de la recherche</h3>
+					<ul class=" divide-y divide-primary-500">
+						{#each results as video, index}
+							<li class="">
+								{#if index === 0}
+									<div class="h-[0.5px] w-full bg-primary-500"></div>
+								{/if}
+
+								<a
+									href={`/kodo/cours/${video.id}`}
+									class="text-secondary-500 flex justify-between py-2"
+								>
+									<span class="font-bold">
+										{video.title.slice(0, 20)}{video.title.length > 20 ? '…' : ''}</span
+									>
+									<span>{video.user.firstname}</span>
+								</a>
+							</li>
+						{/each}
+					</ul>
+				</div>
+			{/if}
+			<div></div>
+		</div>
+
+		<h2 class=" border-b-2">{filterData[activeFilter].label}</h2>
+
+		<div class="space-y-6 px-4">
+			<div class="overflow-x-auto">
 				<div class="flex gap-2 px-4 mx-auto">
 					{#each filters as filter}
 						<button
