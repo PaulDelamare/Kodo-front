@@ -110,5 +110,23 @@ export default class VideoApi extends Api {
                console.error('Error searching video by name: ' + error);
                throw new Error('Error searching video by name: ' + error);
           }
+     };
+
+     deleetVideo = async (id: string): Promise<ApiResponse> => {
+          try {
+               const response = await this.fetch(
+                    `${env.API_URL}video/${id}`,
+                    {
+                         method: 'DELETE',
+                         credentials: 'include'
+                    }
+               );
+
+               const data: ApiResponse = await response.json();
+               return { ...data };
+          } catch (error) {
+               console.error('Error deleting video: ' + error);
+               throw new Error('Error deleting video: ' + error);
+          }
      }
 }
