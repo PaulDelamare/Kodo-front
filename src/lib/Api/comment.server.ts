@@ -44,7 +44,7 @@ export default class CommentApi extends Api {
                 }
             );
 
-            const data: ApiResponse = await response.json();
+            const data: ApiResponse<Comment[]> = await response.json();
             return { ...data };
         } catch (error) {
             console.error('FindAllCommentsByVideoId : ' + error);
