@@ -10,7 +10,7 @@ export interface SaveVideo {
           thumbnailUrl: string;
           videoUrl: string;
           viewCount: number;
-          _count: { views: 1 }
+          _count: { views: number }
      },
      user: {
           id: string;
