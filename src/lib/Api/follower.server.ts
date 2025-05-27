@@ -21,8 +21,8 @@ export default class FollowerApi extends Api {
                return { ...data };
           } catch (error) {
 
-               console.error('Error creating video: ' + error);
-               throw new Error('Error creating video: ' + error);
+               console.error('Error following user: ' + error);
+               throw new Error('Error following user: ' + error);
           }
      };
 
