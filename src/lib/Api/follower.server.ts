@@ -1,10 +1,9 @@
 import { env } from '$env/dynamic/private';
-import type { Conversation } from '$lib/Models/conversation.model';
 import type { ApiResponse } from '$lib/Models/response.model';
 import { Api } from './api.server';
 
 export default class FollowerApi extends Api {
-     followUser = async (userId: string): Promise<ApiResponse<Conversation[]>> => {
+     followUser = async (userId: string): Promise<ApiResponse> => {
           try {
                const response = await this.fetch(
                     `${env.API_URL}follow/${userId}`,
@@ -17,7 +16,7 @@ export default class FollowerApi extends Api {
                     }
                );
 
-               const data: ApiResponse<Conversation[]> = await response.json();
+               const data: ApiResponse = await response.json();
                return { ...data };
           } catch (error) {
 
