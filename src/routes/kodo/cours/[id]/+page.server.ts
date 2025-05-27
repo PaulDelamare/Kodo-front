@@ -26,7 +26,7 @@ export const load = (async ({ fetch, params }) => {
     const form = await superValidate(zod(commentSchema));
 
     const apiComment = new CommentApi(fetch);
-    const resComments = await apiComment.getAllProductByMerchantId(id, 1, 5);
+    const resComments = await apiComment.findAllCommentsInfinite(id, 1, 5);
 
     if ("error" in resComments) {
         throw error(404, resComments.error.message);
@@ -70,7 +70,7 @@ export const actions: Actions = {
         const page = Number(formData.get('page') || '1');
 
         const apiComment = new CommentApi(fetch);
-        const res = await apiComment.getAllProductByMerchantId(params.id!, page, 5);
+        const res = await apiComment.findAllCommentsInfinite(params.id!, page, 5);
 
         if ('error' in res) {
             throw error(404, res.error.message);
