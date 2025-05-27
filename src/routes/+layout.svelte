@@ -5,8 +5,12 @@
 	import { Toaster } from 'svelte-french-toast';
 	import '../app.postcss';
 	import Navbar from '$lib/Component/layout/Navbar.svelte';
+	import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
 
 	let innerWidth: number;
+
+	import { storePopup } from '@skeletonlabs/skeleton';
+	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 </script>
 
 <svelte:window bind:innerWidth />
@@ -33,10 +37,10 @@
 	</div>
 {:else}
 	<section class="h-svh flex flex-col justify-between">
-		<div class="w-full fixed top-0 left-0 z-10">
+		<div class="w-full !h-10 fixed top-0 left-0 z-[100] bg-surface-500">
 			<Header />
 		</div>
-		<div class="flex-1 flex flex-col pb-24">
+		<div class="flex-1 flex flex-col pt-10 {$page.url.pathname.startsWith('/kodo') ? 'pb-24' : ''}">
 			<slot />
 		</div>
 

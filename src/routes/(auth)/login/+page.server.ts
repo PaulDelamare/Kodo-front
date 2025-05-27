@@ -18,12 +18,20 @@ export const actions: Actions = {
     login: async ({ request, fetch, cookies }) => {
         const form = await superValidate(request, zod(loginSchema));
 
+        if (!form.valid) {
+            return message(form, {
+                error: 'Formulaire invalide',
+                status: 400
+            });
+
+        }
+
         const api = new AuthApi(fetch)
         const res = await api.login(form.data.email, form.data.password, true)
 
         if ("error" in res) {
-            return message(form, res.error.message, {
-                status: res.status
+            return message(form, {
+                error: res.error.message
             });
         }
 
