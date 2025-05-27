@@ -19,8 +19,8 @@ export default class VideoApi extends Api {
                return { ...data };
           } catch (error) {
 
-               console.error('Get info : ' + error);
-               throw new Error('Error Get info : ' + error);
+               console.error('Error creating video: ' + error);
+               throw new Error('Error creating video: ' + error);
           }
      };
 
