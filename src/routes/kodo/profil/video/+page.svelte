@@ -23,7 +23,7 @@
 					<div class="w-full max-w-xs flex flex-col gap-2 relative">
 						<div class="absolute top-2 right-2 z-10">
 							<MultiButton {index} identification="video">
-								<form on:submit={() => alert('Bientôt disponible')} class="p-2">
+								<form method="POST" action="?/delete" class="p-2">
 									<input name="id" type="hidden" value={video.id} />
 									<DeleteButton />
 								</form>
