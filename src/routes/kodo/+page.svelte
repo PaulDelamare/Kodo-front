@@ -243,7 +243,7 @@
 							<div class="flex justify-between px-4">
 								<h3 class="text-lg font-semibold text-center">{video.title}</h3>
 								<p class="text-sm text-gray-600 text-center flex items-center gap-2">
-									<UsersPicto classCustom="w-4" />{video.viewCount}
+									<UsersPicto classCustom="w-4" />{video._count.views}
 								</p>
 							</div>
 						</a>
