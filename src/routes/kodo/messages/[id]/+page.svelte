@@ -139,7 +139,7 @@
 						class="!w-full rounded-full border-none"
 						type="text"
 						name="content"
-						value={messageToSend}
+						bind:value={messageToSend}
 					/></label
 				>
 				<button class=" px-4 block h-full"
