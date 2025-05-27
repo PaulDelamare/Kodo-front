@@ -71,8 +71,8 @@
 			<!-- Chat Messages -->
 			<div bind:this={element} class="h-full max-w-full overflow-y-auto p-4">
 				{#each messages as message}
-					{#if linkify(message.content)}
-						<div class=" flex flex-col gap-1 mb-1">
+					{#if message.content}
+						<div class="flex flex-col gap-1 mb-1">
 							<p class="text-sm font-light {user.id === message.sender?.id ? 'text-end' : ''}">
 								{user.id === message.sender?.id
 									? 'Vous'
@@ -139,7 +139,7 @@
 						class="!w-full rounded-full border-none"
 						type="text"
 						name="content"
-						value={messageToSend}
+						bind:value={messageToSend}
 					/></label
 				>
 				<button class=" px-4 block h-full"
