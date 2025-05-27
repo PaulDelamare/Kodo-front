@@ -51,13 +51,13 @@
 
 		if (res.ok) {
 			const newCommentsStringify = await res.json();
-			const newComments: Video[] = newCommentsStringify.data;
+			const data = JSON.parse(JSON.parse(newCommentsStringify.data)).data as Video[];
 
-			if (newComments.length === 0) {
+			if (data.length === 0) {
 				hasMore = false;
 			} else {
 				const existingIds = new Set(videos.map((p) => p.id));
-				const uniqueNewComments = newComments.filter((p) => !existingIds.has(p.id));
+				const uniqueNewComments = data.filter((p) => !existingIds.has(p.id));
 
 				videos = [...videos, ...uniqueNewComments];
 
