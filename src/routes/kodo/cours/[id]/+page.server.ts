@@ -6,6 +6,8 @@ import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { commentSchema } from '$lib/Schema/comment.schema';
 import CommentApi from '$lib/Api/comment.server';
+import SaveApi from '$lib/Api/save.server';
+import ViewApi from '$lib/Api/view.server';
 
 
 export const load = (async ({ fetch, params }) => {
@@ -32,11 +34,28 @@ export const load = (async ({ fetch, params }) => {
         throw error(404, resComments.error.message);
     }
 
+    const apiSave = new SaveApi(fetch);
+
+    const saveResponse = await apiSave.checkSave(id);
+
+    if ("error" in saveResponse) {
+        throw error(500, saveResponse.error.message);
+    }
+
+    const apiView = new ViewApi(fetch);
+    const viewResponse = await apiView.viewVideo(id);
+
+    if ("error" in viewResponse) {
+        throw error(500, viewResponse.error.message);
+
+    }
+
     return {
         video: response.data,
         imgUrl,
         form,
         comments: resComments.data,
+        isSaved: saveResponse.data.isSaved,
     };
 }) satisfies PageServerLoad;
 
@@ -77,5 +96,16 @@ export const actions: Actions = {
         }
 
         return JSON.stringify(res);
-    }
+    },
+
+    saveVideo: async ({ fetch, params }) => {
+        const apiSave = new SaveApi(fetch);
+        const response = await apiSave.saveVideo(params.id!);
+
+        if ("error" in response) {
+            throw error(500, response.error.message);
+        }
+
+        return { success: true };
+    },
 }
