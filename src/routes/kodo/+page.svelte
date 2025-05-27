@@ -6,6 +6,7 @@
 	import type { Video } from '$lib/Models/video.model';
 	import { fly } from 'svelte/transition';
 	import ChevronDownPicto from '$lib/Component/Picto/ChevronDownPicto.svelte';
+	import SearchPicto from '$lib/Component/Picto/SearchPicto.svelte';
 
 	export let data: PageData;
 
@@ -163,13 +164,16 @@
 	{#if videos && imgUrl}
 		<div bind:this={toggleContainer}></div>
 		<div class="px-8 relative w-full">
-			<input
-				bind:value={query}
-				on:input={onInput}
-				type="search"
-				placeholder="Rechercher..."
-				class="input-container rounded-full w-full"
-			/>
+			<label class="flex items-center border border-tertiary-200 rounded-full w-full pl-2">
+				<SearchPicto classCustom="w-6 h-6 fill-tertiary-300" /><input
+					bind:value={query}
+					on:input={onInput}
+					type="search"
+					placeholder="Rechercher..."
+					class="border-none w-full rounded-full"
+				/></label
+			>
+
 			{#if query && results.length > 0}
 				<div
 					class="absolute top-11 left-0 w-full bg-surface-200 border shadow-xl rounded-lg p-4 z-50"
@@ -271,5 +275,10 @@
 <style>
 	.header-diagonal {
 		clip-path: polygon(60% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 60%);
+	}
+	
+	input:focus {
+		outline: none;
+		box-shadow: none;
 	}
 </style>
