@@ -1,5 +1,6 @@
 <script lang="ts">
 	export let title: string;
+    export let padding = 'p-4';
 </script>
 
 <section class="">
@@ -9,7 +10,7 @@
 		<h2>{title}</h2>
 	</div>
 
-	<div class="flex flex-col gap-4 p-4 pt-16">
+	<div class="flex flex-col gap-4 {padding} pt-16">
 		<slot />
 	</div>
 </section>
