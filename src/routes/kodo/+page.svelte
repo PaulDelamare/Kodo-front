@@ -17,26 +17,28 @@
 	let pageData = 2;
 	let hasMore = true;
 
-	let activeFilter: '' | 'graphisme' | '3d-art' | 'ui-ux' = '';
+	let activeFilter: '' | 'graphisme' | '3d-art' | 'ui-ux' | 'follow' = '';
 
-	const filterData: Record<'' | 'graphisme' | '3d-art' | 'ui-ux', any> = {
+	const filterData: Record<'' | 'graphisme' | '3d-art' | 'ui-ux' | 'follow', any> = {
 		'': { label: 'Toutes', description: 'Tous les cours disponibles' },
 		graphisme: { label: 'Graphisme', description: 'Cours de graphisme' },
 		'3d-art': { label: '3D Art', description: 'Cours de 3D Art' },
-		'ui-ux': { label: 'UI / UX', description: 'Cours de UI / UX' }
+		'ui-ux': { label: 'UI / UX', description: 'Cours de UI / UX' },
+		follow: { label: 'Suivi', description: 'Cours que vous suivez' }
 	};
 
 	let loadMoreInUse = false;
 
 	const filters = [
 		{ label: 'Toutes', value: '' },
+		{ label: 'Suivi', value: 'follow' },
 		{ label: 'Graphisme', value: 'graphisme' },
 		{ label: '3D Art', value: '3d-art' },
 		{ label: 'UI / UX', value: 'ui-ux' }
 	];
 
 	const changeActiveFilter = (filter: string) => {
-		activeFilter = filter as '' | 'graphisme' | '3d-art' | 'ui-ux';
+		activeFilter = filter as '' | 'graphisme' | '3d-art' | 'ui-ux' | 'follow';
 		pageData = 1;
 		videos = [];
 		loadMore();
@@ -69,8 +71,6 @@
 
 				pageData++;
 			}
-		} else {
-			console.error('Erreur lors du chargement des produits');
 		}
 		loadMoreInUse = false;
 	}
@@ -127,6 +127,7 @@
 
 		const formData = new FormData();
 		formData.append('query', q);
+		formData.append('categorie', activeFilter);
 
 		loading = true;
 		try {
@@ -142,8 +143,6 @@
 				const data = JSON.parse(JSON.parse(newComments)).results.data as Video[];
 
 				results = data;
-			} else {
-				console.error('Erreur lors du chargement des produits');
 			}
 		} catch (e) {
 			console.error('Recherche échouée', e);
@@ -220,16 +219,16 @@
 				</div>
 			</div>
 
-			{#each videos as video, index}
+			{#each videos as video}
 				<div class="flex flex-col items-center gap-2">
 					<!-- Lien vers la page de détail de la vidéo -->
 					<div class="w-full flex flex-col gap-2 relative">
 						<div
 							class="header-diagonal bg-primary-500 size-14 flex justify-end items-center pr-1 pt-2 absolute top-0 left-0 z-10"
 						>
-							<div class="size-10 rounded-full p-1">
+							<a href={`/kodo/profil/${video.user.id}`} class="size-10 rounded-full p-1">
 								<img src="/images/embleme.png" alt="Logo de l'utilisateur" />
-							</div>
+							</a>
 						</div>
 						<a href={`/kodo/cours/${video.id}`} class="block">
 							<div class="relative">
@@ -242,7 +241,7 @@
 							</div>
 
 							<div class="flex justify-between px-4">
-								<h3 class="text-lg font-semibold text-center">{video.title} {video.categorie}</h3>
+								<h3 class="text-lg font-semibold text-center">{video.title}</h3>
 								<p class="text-sm text-gray-600 text-center flex items-center gap-2">
 									<UsersPicto classCustom="w-4" />{video.viewCount}
 								</p>
