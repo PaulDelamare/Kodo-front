@@ -3,6 +3,7 @@
 	import type { User } from '$lib/Models/user.model';
 
 	export let user: User;
+	export let link = true;
 </script>
 
 <div class="flex flex-col gap-3">
@@ -22,19 +23,21 @@
 			</div>
 		</div>
 	</div>
-	<div class="flex justify-center gap-4">
-		<a
-			class="note {$page.url.pathname === '/kodo/profil/video'
-				? '!bg-secondary-500 text-surface-500'
-				: ''}"
-			href="/kodo/profil/video"
-		>
-			Mes vidéos
-		</a>
-		<a class="note cursor-pointer" on:click|preventDefault={() => alert('Coming soon')} href="/">
-			Mes enregistrements
-		</a>
-	</div>
+	{#if link}
+		<div class="flex justify-center gap-4">
+			<a
+				class="note {$page.url.pathname === '/kodo/profil/video'
+					? '!bg-secondary-500 text-surface-500'
+					: ''}"
+				href="/kodo/profil/video"
+			>
+				Mes vidéos
+			</a>
+			<a class="note cursor-pointer" on:click|preventDefault={() => alert('Coming soon')} href="/">
+				Mes enregistrements
+			</a>
+		</div>
+	{/if}
 </div>
 
 <style>
