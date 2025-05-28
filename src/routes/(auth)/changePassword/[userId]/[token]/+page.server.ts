@@ -8,10 +8,10 @@ import AuthApi from '$lib/Api/auth.server';
 const newChangePasswordSchema = z.object({
     password: z.string()
         .min(8, 'Le mot de passe doit contenir au moins 8 caractères')
-        .max(30, 'Le mot de passe doit contenir au moins 30 caractères'),
+        .max(30, 'Le mot de passe doit contenir au maximum 30 caractères'),
     password_confirmation: z.string()
         .min(8, 'Le mot de passe doit contenir au moins 8 caractères')
-        .max(30, 'Le mot de passe doit contenir au moins 30 caractères'),
+        .max(30, 'Le mot de passe doit contenir au maximum 30 caractères'),
 })
 
 export const load = (async (event) => {
