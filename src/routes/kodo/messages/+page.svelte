@@ -4,7 +4,7 @@
 	import type { User } from '$lib/Models/user.model';
 	import { goto } from '$app/navigation';
 	import { enhance } from '$app/forms';
-	import type { PageData } from './$types';
+	import type { ActionData, PageData } from './$types';
 	import { timeSince } from '$lib/Utils/formatDate';
 	import { superForm } from 'sveltekit-superforms';
 	import toast from 'svelte-french-toast';
@@ -19,7 +19,7 @@
 	let results: User[] = [];
 	let loading = false;
 
-	const { form, errors, validateForm, message } = superForm(data.form);
+	const { message } = superForm(data.form);
 
 	async function doSearch(q: string) {
 		if (!q) {

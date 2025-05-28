@@ -6,13 +6,10 @@ import UserApi from '$lib/Api/user.server';
 import { zod } from 'sveltekit-superforms/adapters';
 import { superValidate } from 'sveltekit-superforms';
 import { message } from 'sveltekit-superforms';
+import { findConvSchema } from '$lib/Schema/findConv.schema';
 
 const searchSchema = z.object({
     query: z.string().min(1)
-});
-
-const findConvSchema = z.object({
-    userId: z.string().uuid()
 });
 
 export const load = (async ({ fetch }) => {
@@ -80,5 +77,6 @@ export const actions: Actions = {
             success: true,
             response: response.data
         });
+
     }
 };
