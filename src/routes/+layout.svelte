@@ -15,7 +15,7 @@
 
 <svelte:window bind:innerWidth />
 
-{#if innerWidth > 800}
+{#if innerWidth > 1200}
 	<div
 		style="
 		display: flex;
