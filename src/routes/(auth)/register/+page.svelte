@@ -33,6 +33,7 @@
 			}, 500);
 		}
 	}
+	$:console.log($message)
 
 	$: {
 		if ($message && $message.error) {
