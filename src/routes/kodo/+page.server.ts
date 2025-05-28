@@ -5,8 +5,7 @@ import type { PageServerLoad } from './$types';
 export const load = (async ({ fetch }) => {
 
     const apiVideo = new VideoApi(fetch);
-    const response = await apiVideo.findAllVideoInfinite(1, 2);
-
+    const response = await apiVideo.findAllVideoInfinite(1, 5);
 
     if ("error" in response) {
         throw new Error("Erreur lors de la récupération des vidéos");
@@ -25,7 +24,7 @@ export const actions: Actions = {
         const filter = formData.get('filter') as 'graphisme' | '3d-art' | 'ui-ux' | 'follow' || undefined;
 
         const apiComment = new VideoApi(fetch);
-        const res = await apiComment.findAllVideoInfinite(page, 2, filter);
+        const res = await apiComment.findAllVideoInfinite(page, 5, filter);
 
 
         if ('error' in res) {
