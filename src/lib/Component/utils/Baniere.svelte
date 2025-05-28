@@ -11,7 +11,7 @@
 
 <div class="flex flex-col gap-3">
 	{#if goBackButton}
-		<div class="p-4">
+		<div class="px-4">
 			<button on:click={goBack}>
 				<ArrowLeftPicto classCustom="w-6" />
 			</button>
