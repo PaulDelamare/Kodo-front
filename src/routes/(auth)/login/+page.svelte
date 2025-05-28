@@ -60,14 +60,7 @@
 			/>
 		</Label>
 		<div class="pl-6">
-			<button
-				type="button"
-				class="!text-secondary-500"
-				on:click={() =>
-					alert(
-						"Pas encore dispo, je n'ai eu que 3 jours... Vous pensiez vraiment que j'allais tout faire ? Non, laissez tomber, vous ne retrouverez pas votre mot de passe."
-					)}>Mot de passe oublié ?</button
-			>
+			<a href="/resetPassword" type="button" class="!text-secondary-500">Mot de passe oublié ?</a>
 		</div>
 
 		<label class="flex items-center gap-2 pl-2"> <input type="checkbox" /> Rester connecté </label>

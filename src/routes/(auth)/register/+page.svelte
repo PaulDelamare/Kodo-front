@@ -33,6 +33,7 @@
 			}, 500);
 		}
 	}
+	
 
 	$: {
 		if ($message && $message.error) {

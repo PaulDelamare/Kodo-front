@@ -36,7 +36,7 @@ export const actions: Actions = {
 
         if ("error" in response) {
             return message(form, {
-                error: response.error.message,
+                error: response.error,
                 status: response.status
             });
         }
