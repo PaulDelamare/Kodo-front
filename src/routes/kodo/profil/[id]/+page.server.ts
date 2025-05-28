@@ -3,6 +3,11 @@ import type { PageServerLoad } from './$types';
 import UserApi from '$lib/Api/user.server';
 import { env } from '$env/dynamic/private';
 import FollowerApi from '$lib/Api/follower.server';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import { findConvSchema } from '$lib/Schema/findConv.schema';
+import { message } from 'sveltekit-superforms';
+import ConversationApi from '$lib/Api/conversation.server';
 
 export const load = (async ({ params, locals, fetch }) => {
 
@@ -33,11 +38,14 @@ export const load = (async ({ params, locals, fetch }) => {
         throw error(500, followResponse.error.message);
     }
 
+    const form = await superValidate(zod(findConvSchema));
+
     return {
         userProfile: response.data,
         user,
         imgUrl,
-        isFollowing: followResponse.data.isFollowing
+        isFollowing: followResponse.data.isFollowing,
+        form
     };
 }) satisfies PageServerLoad;
 
@@ -52,5 +60,32 @@ export const actions: Actions = {
         }
 
         return { success: true };
+    },
+    findConversation: async ({ request, fetch }) => {
+
+        const form = await superValidate(request, zod(findConvSchema));
+
+        if (!form.valid) {
+            return message(form, {
+                error: 'Formulaire invalide'
+            });
+        }
+
+        const apiConversation = new ConversationApi(fetch);
+        const response = await apiConversation.findConversationByUserId(form.data.userId);
+
+
+        if ("error" in response) {
+            throw message(form, {
+                error: response.error.message
+            });
+            ;
+        }
+
+        return message(form, {
+            success: true,
+            response: response.data
+        });
+
     }
 }
