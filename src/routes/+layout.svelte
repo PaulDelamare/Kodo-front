@@ -35,7 +35,7 @@
 			Ce site est uniquement disponible sur mobile
 		</h1>
 	</div>
-{:else}
+{:else if !$page.error}
 	<section class="h-svh flex flex-col justify-between">
 		<div class="w-full !h-10 fixed top-0 left-0 z-[100] bg-surface-500">
 			<Header />
@@ -52,4 +52,6 @@
 	</section>
 	<InstallButton />
 	<Toaster position="bottom-center" />
+{:else}
+	<slot />
 {/if}

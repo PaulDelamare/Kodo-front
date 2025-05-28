@@ -6,6 +6,7 @@
 	import type { Video } from '$lib/Models/video.model';
 	import { fly } from 'svelte/transition';
 	import ChevronDownPicto from '$lib/Component/Picto/ChevronDownPicto.svelte';
+	import SearchPicto from '$lib/Component/Picto/SearchPicto.svelte';
 
 	export let data: PageData;
 
@@ -17,20 +18,28 @@
 	let pageData = 2;
 	let hasMore = true;
 
-	let activeFilter: '' | 'graphisme' | '3d-art' | 'ui-ux' = '';
+	let activeFilter: '' | 'graphisme' | '3d-art' | 'ui-ux' | 'follow' = '';
+
+	const filterData: Record<'' | 'graphisme' | '3d-art' | 'ui-ux' | 'follow', any> = {
+		'': { label: 'Toutes', description: 'Tous les cours disponibles' },
+		graphisme: { label: 'Graphisme', description: 'Cours de graphisme' },
+		'3d-art': { label: '3D Art', description: 'Cours de 3D Art' },
+		'ui-ux': { label: 'UI / UX', description: 'Cours de UI / UX' },
+		follow: { label: 'Suivi', description: 'Cours que vous suivez' }
+	};
 
 	let loadMoreInUse = false;
 
 	const filters = [
 		{ label: 'Toutes', value: '' },
+		{ label: 'Suivi', value: 'follow' },
 		{ label: 'Graphisme', value: 'graphisme' },
 		{ label: '3D Art', value: '3d-art' },
 		{ label: 'UI / UX', value: 'ui-ux' }
 	];
 
 	const changeActiveFilter = (filter: string) => {
-		console.log('here');
-		activeFilter = filter as '' | 'graphisme' | '3d-art' | 'ui-ux';
+		activeFilter = filter as '' | 'graphisme' | '3d-art' | 'ui-ux' | 'follow';
 		pageData = 1;
 		videos = [];
 		loadMore();
@@ -51,20 +60,18 @@
 
 		if (res.ok) {
 			const newCommentsStringify = await res.json();
-			const newComments: Video[] = newCommentsStringify.data;
+			const data = JSON.parse(JSON.parse(newCommentsStringify.data)).data as Video[];
 
-			if (newComments.length === 0) {
+			if (data.length === 0) {
 				hasMore = false;
 			} else {
 				const existingIds = new Set(videos.map((p) => p.id));
-				const uniqueNewComments = newComments.filter((p) => !existingIds.has(p.id));
+				const uniqueNewComments = data.filter((p) => !existingIds.has(p.id));
 
 				videos = [...videos, ...uniqueNewComments];
 
 				pageData++;
 			}
-		} else {
-			console.error('Erreur lors du chargement des produits');
 		}
 		loadMoreInUse = false;
 	}
@@ -90,7 +97,6 @@
 		const observer = new IntersectionObserver(
 			([entry]) => {
 				showScrollTop = !entry.isIntersecting;
-				console.log('herehuieifhuir', !entry.isIntersecting);
 			},
 			{ threshold: 0 }
 		);
@@ -107,13 +113,100 @@
 		// Remonter l’élément bindé en haut du viewport, puis ajuster de 90px vers le haut
 		toggleContainer?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 	}
+
+	let query = '';
+	let debounceTimeout: ReturnType<typeof setTimeout>;
+	let loading = false;
+
+	let results: Video[] = [];
+
+	async function doSearch(q: string) {
+		if (!q) {
+			results = [];
+			return;
+		}
+
+		const formData = new FormData();
+		formData.append('query', q);
+		formData.append('categorie', activeFilter);
+
+		loading = true;
+		try {
+			const res = await fetch(`${window.location.pathname}?/search`, {
+				method: 'POST',
+				body: formData
+			});
+
+			if (res.ok) {
+				const newCommentsStringify = await res.json();
+				const newComments = newCommentsStringify.data;
+
+				const data = JSON.parse(JSON.parse(newComments)).results.data as Video[];
+
+				results = data;
+			}
+		} catch (e) {
+			console.error('Recherche échouée', e);
+		} finally {
+			loading = false;
+		}
+	}
+
+	function onInput() {
+		clearTimeout(debounceTimeout);
+		debounceTimeout = setTimeout(() => {
+			doSearch(query);
+		}, 500);
+	}
 </script>
 
-<Layout title="Accueil">
+<Layout padding="" title="Accueil">
 	{#if videos && imgUrl}
 		<div bind:this={toggleContainer}></div>
-		<div class="space-y-6 mt-2">
-			<div class="overflow-x-auto py-2">
+		<div class="px-8 relative w-full">
+			<label class="flex items-center border border-tertiary-200 rounded-full w-full pl-2">
+				<SearchPicto classCustom="w-6 h-6 fill-tertiary-300" /><input
+					bind:value={query}
+					on:input={onInput}
+					type="search"
+					placeholder="Rechercher..."
+					class="border-none w-full rounded-full"
+				/></label
+			>
+
+			{#if query && results.length > 0}
+				<div
+					class="absolute top-11 left-0 w-full bg-surface-200 border shadow-xl rounded-lg p-4 z-50"
+				>
+					<h3 class="text-lg font-semibold mb-2">Résultats de la recherche</h3>
+					<ul class=" divide-y divide-primary-500">
+						{#each results as video, index}
+							<li class="">
+								{#if index === 0}
+									<div class="h-[0.5px] w-full bg-primary-500"></div>
+								{/if}
+
+								<a
+									href={`/kodo/cours/${video.id}`}
+									class="text-secondary-500 flex justify-between py-2"
+								>
+									<span class="font-bold">
+										{video.title.slice(0, 20)}{video.title.length > 20 ? '…' : ''}</span
+									>
+									<span>{video.user.firstname}</span>
+								</a>
+							</li>
+						{/each}
+					</ul>
+				</div>
+			{/if}
+			<div></div>
+		</div>
+
+		<h2 class=" border-b-2">{filterData[activeFilter].label}</h2>
+
+		<div class="space-y-6 px-4">
+			<div class="overflow-x-auto">
 				<div class="flex gap-2 px-4 mx-auto">
 					{#each filters as filter}
 						<button
@@ -130,16 +223,16 @@
 				</div>
 			</div>
 
-			{#each videos as video, index}
+			{#each videos as video}
 				<div class="flex flex-col items-center gap-2">
 					<!-- Lien vers la page de détail de la vidéo -->
 					<div class="w-full flex flex-col gap-2 relative">
 						<div
 							class="header-diagonal bg-primary-500 size-14 flex justify-end items-center pr-1 pt-2 absolute top-0 left-0 z-10"
 						>
-							<div class="size-10 rounded-full p-1">
+							<a href={`/kodo/profil/${video.user.id}`} class="size-10 rounded-full p-1">
 								<img src="/images/embleme.png" alt="Logo de l'utilisateur" />
-							</div>
+							</a>
 						</div>
 						<a href={`/kodo/cours/${video.id}`} class="block">
 							<div class="relative">
@@ -152,9 +245,9 @@
 							</div>
 
 							<div class="flex justify-between px-4">
-								<h3 class="text-lg font-semibold text-center">{video.title} {video.categorie}</h3>
+								<h3 class="text-lg font-semibold text-center">{video.title}</h3>
 								<p class="text-sm text-gray-600 text-center flex items-center gap-2">
-									<UsersPicto classCustom="w-4" />{video.viewCount}
+									<UsersPicto classCustom="w-4" />{video._count.views}
 								</p>
 							</div>
 						</a>
@@ -182,5 +275,10 @@
 <style>
 	.header-diagonal {
 		clip-path: polygon(60% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 60%);
+	}
+	
+	input:focus {
+		outline: none;
+		box-shadow: none;
 	}
 </style>

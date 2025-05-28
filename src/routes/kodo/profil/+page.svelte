@@ -9,7 +9,7 @@
 </script>
 
 <Layout title="Mon profil">
-	<Baniere {user} />
+	<Baniere goBackButton={false} {user} />
 	<div class="flex flex-col items-center gap-12">
 		<div class="flex flex-col gap-3">
 			<h2>Partage tes contenus et tutoriels avec la communauté de KODO</h2>
