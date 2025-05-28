@@ -2,7 +2,7 @@ import { videoSchema } from '$lib/Schema/video.schema';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from './$types';
 import { message, superValidate } from 'sveltekit-superforms';
-import type { Actions } from '@sveltejs/kit';
+import { redirect, type Actions } from '@sveltejs/kit';
 import VideoApi from '$lib/Api/video.server';
 
 export const load = (async () => {
@@ -17,7 +17,9 @@ export const load = (async () => {
 export const actions: Actions = {
     addVideo: async ({ request, fetch }) => {
 
-        const form = await superValidate(request, zod(videoSchema));
+        const formDataForm = await request.formData();
+
+        const form = await superValidate(formDataForm, zod(videoSchema));
 
         if (!form.valid) {
             return { form };
@@ -39,9 +41,6 @@ export const actions: Actions = {
 
         }
 
-        return message(form, {
-            success: true,
-            redirect: `/kodo/cours/${response.data.id}`,
-        })
+        redirect(303, `/kodo/cours/${response.data.id}`);
     }
 }
