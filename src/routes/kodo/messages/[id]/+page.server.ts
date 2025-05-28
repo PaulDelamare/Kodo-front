@@ -42,6 +42,7 @@ export const load = (async ({ cookies, params, fetch }) => {
     const form = await superValidate(zod(messageSchema));
 
 
+    const websocketUrl = env.WEBSOCKET_URL;
     return {
         websocketKey,
         bearer,
@@ -49,6 +50,7 @@ export const load = (async ({ cookies, params, fetch }) => {
         messages: response.data,
         form,
         checkConv: checkConversation.data,
+        websocketUrl
     };
 }) satisfies PageServerLoad;
 
