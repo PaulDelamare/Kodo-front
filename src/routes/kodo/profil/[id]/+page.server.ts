@@ -20,7 +20,6 @@ export const load = (async ({ params, locals, fetch }) => {
 
     const response = await apiUser.findUserById(id);
 
-    console.log(response);
     if ("error" in response) {
         throw error(404, response.error.message);
     }
