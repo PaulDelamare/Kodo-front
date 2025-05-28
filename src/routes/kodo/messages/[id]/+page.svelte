@@ -21,6 +21,7 @@
 	const id = data.id;
 	let messages = data.messages;
 	const checkConv = data.checkConv;
+	const websocketUrl = data.websocketUrl;
 
 	let ws: WebSocketManager<Message>;
 
@@ -31,7 +32,7 @@
 		}
 	}
 
-	ws = new WebSocketManager(websocketKey, bearer, handleMessage, 'join', id);
+	ws = new WebSocketManager(websocketKey, bearer, handleMessage, 'join', id, websocketUrl);
 
 	onMount(async () => {
 		ws.connect();
