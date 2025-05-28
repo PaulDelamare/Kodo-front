@@ -72,7 +72,7 @@
 
 		<label class="flex items-center gap-2 pl-2"> <input type="checkbox" /> Rester connecté </label>
 		<SubmitButton disabled={!formValid}>Se connecter</SubmitButton>
-		<p class="font-semibold text-pretty">
+		<p class="font-semibold text-pretty text-center">
 			Vous n'avez pas encore de compte ? <a class="text-primary-500 font-normal" href="/register"
 				>S'inscrire</a
 			>

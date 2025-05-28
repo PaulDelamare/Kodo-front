@@ -18,6 +18,7 @@ export class WebSocketManager<T> {
         onMessageCallback: (data: T) => void,
         action: string,
         id: string | null = null,
+        url = 'ws://localhost:7000/socket-historic',
         reconnectInterval = 5000,
         pingInterval = 60000
     ) {
@@ -28,6 +29,7 @@ export class WebSocketManager<T> {
         this.pingIntervalDuration = pingInterval;
         this.action = action;
         this.id = id;
+        this.url = url;
     }
 
     public connect() {

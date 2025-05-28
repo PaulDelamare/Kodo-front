@@ -206,16 +206,14 @@
 		<h2 class=" border-b-2">{filterData[activeFilter].label}</h2>
 
 		<div class="space-y-6 px-4">
-			<div class="overflow-x-auto">
+			<div class="overflow-x-auto hide-scrollbar">
 				<div class="flex gap-2 px-4 mx-auto">
 					{#each filters as filter}
 						<button
 							class="note whitespace-nowrap {activeFilter === filter.value
 								? '!bg-secondary-500 text-surface-500'
 								: ''}"
-							on:click={() => {
-								changeActiveFilter(filter.value);
-							}}
+							on:click={() => changeActiveFilter(filter.value)}
 						>
 							{filter.label}
 						</button>
@@ -276,9 +274,19 @@
 	.header-diagonal {
 		clip-path: polygon(60% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 60%);
 	}
-	
+
 	input:focus {
 		outline: none;
 		box-shadow: none;
+	}
+
+	/* Masque les scrollbars webkit (Chrome, Safari) */
+	.hide-scrollbar::-webkit-scrollbar {
+		display: none;
+	}
+	/* Masque la scrollbar sur Firefox */
+	.hide-scrollbar {
+		-ms-overflow-style: none; /* IE and Edge */
+		scrollbar-width: none; /* Firefox */
 	}
 </style>
