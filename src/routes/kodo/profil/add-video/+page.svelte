@@ -56,6 +56,14 @@
 
 		$message.success = false;
 	}
+
+	let isSubmit = false;
+	let disabled = false;
+
+	$: if ($message) {
+		isSubmit = false;
+		disabled = false;
+	}
 </script>
 
 <Layout title="Publication">
@@ -70,6 +78,6 @@
 		<Select options={flavorOptions} bind:value={categorieValue} />
 		<Input name="title" placeholder="Titre de la vidéo" bind:value={$form.title} />
 		<input type="hidden" name="categorie" value={categorieValue} />
-		<SubmitButton>Publier</SubmitButton>
+		<SubmitButton bind:disabled wantLoading bind:isSubmit>Publier</SubmitButton>
 	</form>
 </Layout>
